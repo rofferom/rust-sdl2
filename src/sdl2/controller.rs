@@ -78,6 +78,19 @@ impl GameControllerSubsystem {
         }
     }
 
+    /// Returns the instance id of the selected joystick.
+    #[doc(alias = "SDL_JoystickGetDeviceInstanceID")]
+    pub fn get_device_instance_id(&self, joystick_index: u32) -> Option<u32> {
+        let joystick_index = validate_int(joystick_index, "joystick_index").ok()?;
+        let instance_id = unsafe { sys::SDL_JoystickGetDeviceInstanceID(joystick_index) };
+
+        if instance_id == -1 {
+            None
+        } else {
+            Some(instance_id as u32)
+        }
+    }
+
     /// Attempt to open the controller at index `joystick_index` and return it.
     /// Controller IDs are the same as joystick IDs and the maximum number can
     /// be retrieved using the `SDL_NumJoysticks` function.
